@@ -6,7 +6,7 @@ $servername = "mysql.hostinger.in";
 $username = "u294078145_aa112";
 $password = "ame123pun";
 $dbname = "u294078145_flock";
-$bot_token = "5aa6fb82-1cdf-4fe9-b85d-70f44e00e868";//"2bc21613-1d14-4679-b64f-32fe69cbbce7";
+$bot_token = "04891ce2-a697-4961-be8b-cc7c90d398a9";
 $weather_key = "b12e906e36343cad18c4d715c532fe7b";
 $news_key = "d57e794562c849debe8ca8981726cf6e";
 $cricket_key = "YIjoubVlUIc3gUE9mPmg1fs0h4p1";
@@ -338,6 +338,7 @@ function handle_message($uid, $message){
 	$from = $message["from"];
 	$to = $message["to"];
     $text = $message["text"];
+if(!strstr($text,"Current"))
 	perform_action($uid, $text, $uid, $bot_token);
 }
 
@@ -383,7 +384,7 @@ function add_user($uid, $token)
 	if (mysqli_query($conn, $sql) === TRUE) {
 		//echo "New record created successfully";
         $welcome_message = "<flockml>Welcome to the <strong>Weather Bot</strong>. <br/>Type <b>help</b> for more options <br/> Please enter a <strong>city name </strong> <br/>";
-        send_message($uid,$bot_token,$welcome_message,true);
+        send_message($uid,$bot_token,$welcome_message,1);
 	}
 	else {
 		//echo "Error: " . $sql . "<br />" . $conn->error;
@@ -415,7 +416,7 @@ function perform_action($uid, $str, $to, $token){
 
 		// send_message($uid,$bot_token,"Hello From Cricket",false);
 
-		$response = "<flockml> Current Matches:<br/>";
+		$response = "<flockml><strong> Current Matches:</strong><br/>";
 		foreach($matches as $match)
 			{
 			if ($match["squad"] == true && $match["matchStarted"] == true) $response.= "<br/> <action type=\"sendEvent\" id=\"" . $match["unique_id"] . "\">" . $match["team-1"] . " vs " . $match["team-2"] . "</action> <br/>";
@@ -492,7 +493,8 @@ function perform_action($uid, $str, $to, $token){
 	}
 	else{
 		//$welcome_message = "<flockml>Welcome to the <strong>Info Bot</strong>. <br/>Type :<b>Feature</b> [keyword if needed] <br/> Examples:<br/>News COEP<br/>Weather Mumbai<br/>cricket<br/>Wiki India<br/>meaning endanger";
-                $welcome_message = "<flockml>Welcome to the <strong>Info Bot</strong>.<br/>Type :<b>Feature</b> [keyword if needed] <br/> Examples:<br/><strong>News</strong> COEP<br/><strong>Weather</strong> Mumbai<br/><strong>cricket</strong><br/><strong>Wiki</strong> India<br/><strong>meaning</strong> endanger<br/> For <strong>Subscribing</strong> to Weather or News updates: <strong>subscribe weather/news keyword</strong></br> Examples: <strong>subscribe</strong> news Trump</br></br> To subscribe News and Weather in a group don't forget to add our InfoBot in the group and stay updated</br> To unsubscribe just type unsubscribe news/weather";
+                $welcome_message = "<flockml>Welcome to the <strong>Info Bot</strong>.<br/>Type :<b>Feature</b> [keyword if needed] <br/> Examples:<br/><strong>News</strong> COEP<br/><strong>Weather</strong> Mumbai<br/><strong>cricket</strong><br/><strong>Wiki</strong> India<br/><strong>meaning</strong> endanger";
+//<br/> For <strong>Subscribing</strong> to Weather or News updates: <strong>subscribe weather/news keyword</strong></br> Examples: <strong>subscribe</strong> news Trump</br></br> To subscribe News and Weather in a group don't forget to add our InfoBot in the group and stay updated</br> To unsubscribe just type unsubscribe news/weather";
 		send_message($to, $bot_token, $welcome_message, 1);
 	}
 
@@ -510,7 +512,7 @@ function remove_subscription($uid,$type)
 		else { 
 				$subscription_message = "<flockml>You have been unsubscribed for <strong>Weather Updates</strong> from <strong>Info Bot</strong>.</flockml>";
 		}
-		send_message($uid,$bot_token,$subscription_message,true);
+		send_message($uid,$bot_token,$subscription_message,1);
 		//echo "Deleted successfully";
 	}
 	else {
@@ -533,12 +535,12 @@ function add_subscription($uid,$type,$keyword)
 		else { 
 			$subscription_message = "<flockml>You have been subscribed for <strong>Weather Updates</strong> for <strong>".ucfirst($keyword)."</strong> from <strong>Info Bot</strong>.</flockml>";
        }
-		send_message($uid,$bot_token,$subscription_message,true);
+		send_message($uid,$bot_token,$subscription_message,1);
 	}
 	else {
 		//echo "Error: " . $sql . "<br />" . $conn->error;
 	}
 }
-//file_put_contents('post.log', print_r($data,true) . PHP_EOL, FILE_APPEND);
+file_put_contents('post.log', print_r($data,true) . PHP_EOL, FILE_APPEND);
 ?>			
 	
